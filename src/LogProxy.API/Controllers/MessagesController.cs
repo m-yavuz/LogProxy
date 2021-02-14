@@ -1,4 +1,5 @@
 ﻿using LogProxy.Core.DTO;
+using LogProxy.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +10,28 @@ using System.Threading.Tasks;
 
 namespace LogProxy.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class MessagesController : ControllerBase
     {
-        public MessagesController()
-        {
+        private readonly IMessageService messageService;
 
+        public MessagesController(IMessageService messageService)
+        {
+            this.messageService = messageService;
+        }
+
+        [HttpPost]
+        public async Task Add(NewMessageDTO message)
+        {
+            await messageService.Add(message);
         }
 
         [HttpGet]
-        public  MessageDTO GetMessage()
+        public async Task<List<MessageDTO>> GetAll()
         {
-            return new MessageDTO() { };
+           return await messageService.GetAll();
         }
     }
 }

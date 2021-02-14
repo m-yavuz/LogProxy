@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Refit" Version="6.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LogProxy.Core\LogProxy.Core.csproj" />
+    <ProjectReference Include="..\LogProxy.Service\LogProxy.Service.csproj" />
   </ItemGroup>
 
 

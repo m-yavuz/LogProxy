@@ -1,4 +1,7 @@
 using LogProxy.API.Helper;
+using LogProxy.Core.AppSettings;
+using LogProxy.Core.Interfaces;
+using LogProxy.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -28,9 +31,16 @@ namespace LogProxy.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
+            services.Configure<AppSettings>(Configuration);
+
+
             services.AddControllers();
 
             services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { });
+
+            services.AddScoped<IMessageService, MessageService>();
 
         }
 

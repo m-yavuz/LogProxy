@@ -23,15 +23,15 @@ namespace LogProxy.API.Controllers
         }
 
         [HttpPost]
-        public async Task Add(NewMessageDTO message)
+        public async Task<MessageDTO> Add(NewMessageDTO message)
         {
-            await messageService.Add(message);
+            return await messageService.Add(message);
         }
 
         [HttpGet]
         public async Task<List<MessageDTO>> GetAll()
         {
-           return await messageService.GetAll();
+            return await messageService.GetAll();
         }
     }
 }

@@ -10,9 +10,9 @@ namespace LogProxy.Service.Utilities
     public interface IAirTableService
     {
         [Get("/Messages")]
-        Task<DataSet> GetMessages([Query] int maxRecords = 3, [Query] string view = "Grid view");
+        Task<FetchDataSet> GetMessages([Query] int maxRecords = 3, [Query] string view = "Grid view");
 
         [Post("/Messages")]
-        Task AddMessages([Body] DataSet data);
+        Task<FetchDataSet> AddMessages([Body] NewDataSet data);
     }
 }

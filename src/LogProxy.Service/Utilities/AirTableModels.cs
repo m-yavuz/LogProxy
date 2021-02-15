@@ -2,21 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LogProxy.Service.Utilities
 {
     /// <summary>
     /// Represents AirTable Models
     /// </summary>
-    public class Row
+    public class FetchRow
     {
-        public Row() { }
-
-        public Row(NewMessageDTO message)
-        {
-            Summary = message.Title;
-            Message = message.Text;
-        }
+        public FetchRow() { }
 
         public string Id { get; set; }
         public string Summary { get; set; }
@@ -35,36 +30,70 @@ namespace LogProxy.Service.Utilities
         }
     }
 
-    public class Record
+    public class FetchRecord
     {
-        public Record()
-        {
-
-        }
-
-        public Record(NewMessageDTO message)
-        {
-            Fields = new Row(message);
-        }
-
         public string Id { get; set; }
-        public Row Fields { get; set; } = new Row();
+        public FetchRow Fields { get; set; } = new FetchRow();
         public DateTime CreatedTime { get; set; }
     }
 
-    public class DataSet
+    public class FetchDataSet
     {
-        public DataSet()
+        public FetchDataSet()
         {
-            
+
         }
 
-        public DataSet(NewMessageDTO message)
+        public List<FetchRecord> Records { get; set; } = new List<FetchRecord>();
+    }
+
+
+
+    public class NewRow
+    {
+        public NewRow() { }
+
+        public NewRow(NewMessageDTO message)
         {
-            Records = new List<Record>();
-            Records.Add(new Record(message));
+            Summary = message.Title;
+            Message = message.Text;
         }
 
-        public List<Record> Records { get; set; } = new List<Record>();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
+        [JsonPropertyName("Summary")]
+        public string Summary { get; set; }
+
+        [JsonPropertyName("Message")]
+        public string Message { get; set; }
+
+    }
+
+    public class NewRecord
+    {
+        public NewRecord()
+        {
+
+        }
+
+        public NewRecord(NewMessageDTO message)
+        {
+            Fields = new NewRow(message);
+        }
+
+        public NewRow Fields { get; set; } = new NewRow();
+    }
+
+    public class NewDataSet
+    {
+        public NewDataSet() { }
+
+        public NewDataSet(NewMessageDTO message)
+        {
+            Records = new List<NewRecord>();
+            Records.Add(new NewRecord(message));
+        }
+
+        public List<NewRecord> Records { get; set; } = new List<NewRecord>();
     }
 }

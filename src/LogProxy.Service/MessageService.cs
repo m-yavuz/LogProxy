@@ -28,15 +28,15 @@ namespace LogProxy.Service
             airTableService = RestService.For<IAirTableService>(airTableSettings.URL, refitSettings);
         }
 
-        public async Task Add(NewMessageDTO message)
+        public async Task<MessageDTO>  Add(NewMessageDTO message)
         {
             try
             {
-                await airTableService.AddMessages(new DataSet(message));
+                var model = await airTableService.AddMessages(new NewDataSet(message));
+                return model.Records.Select(c => c.Fields.GetMessageDTO()).FirstOrDefault();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

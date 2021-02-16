@@ -8,7 +8,9 @@ easliy you can build , test and run via batch files on the root folder.
 ## Build
 - You can find **Build.bat** file on the root
 - or you can use dotnet cli command
+
 ```bash
+$ dotnet restore src
 $ dotnet build src 
 ```
 

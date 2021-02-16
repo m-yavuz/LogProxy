@@ -8,8 +8,8 @@ namespace LogProxy.Core.Interfaces
 {
     public interface IMessageService
     {
-        Task<MessageDTO> Add(NewMessageDTO message);
+        Task<MessageDTO> AddAsync(NewMessageDTO message);
 
-        Task<List<MessageDTO>> GetAll();
+        Task<List<MessageDTO>> GetAllAsync();
     }
 }

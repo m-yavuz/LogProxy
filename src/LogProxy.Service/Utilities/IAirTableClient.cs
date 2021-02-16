@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LogProxy.Service.Utilities
 {
     [Headers("Authorization: Bearer", "Content-Type: application/json")]
-    public interface IAirTableService
+    public interface IAirTableClient
     {
         [Get("/Messages")]
         Task<FetchDataSet> GetMessages([Query] int maxRecords = 3, [Query] string view = "Grid view");

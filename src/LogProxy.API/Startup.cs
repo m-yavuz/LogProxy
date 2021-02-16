@@ -2,6 +2,7 @@ using LogProxy.API.Helper;
 using LogProxy.Core.AppSettings;
 using LogProxy.Core.Interfaces;
 using LogProxy.Service;
+using LogProxy.Service.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +38,7 @@ namespace LogProxy.API
 
             services.Configure<AppSettings>(Configuration);
 
+            AddingClients(services);
 
             services.AddControllers();
 
@@ -62,6 +66,22 @@ namespace LogProxy.API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void AddingClients(IServiceCollection services)
+        {
+            var appSettings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>().Value;
+
+            var refitSettings = new RefitSettings()
+            {
+
+                AuthorizationHeaderValueGetter = () => Task.FromResult(appSettings.AirTableSettings.Key)
+            };
+
+            services.AddRefitClient<IAirTableClient>(refitSettings)
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(appSettings.AirTableSettings.URL));
+
+
         }
     }
 }

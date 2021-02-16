@@ -14,37 +14,23 @@ namespace LogProxy.Service
 {
     public class MessageService : IMessageService
     {
-        private readonly AirTableSettings airTableSettings;
-        private readonly IAirTableService airTableService;
-        public MessageService(IOptions<AppSettings> options)
+        private readonly IAirTableClient airTableClient;
+
+        public MessageService(IAirTableClient airTableClient)
         {
-            airTableSettings = options.Value.AirTableSettings;
-
-            var refitSettings = new RefitSettings()
-            {
-                AuthorizationHeaderValueGetter = () => Task.FromResult(options.Value.AirTableSettings.Key)
-            };
-
-            airTableService = RestService.For<IAirTableService>(airTableSettings.URL, refitSettings);
+            this.airTableClient = airTableClient;
         }
 
-        public async Task<MessageDTO>  Add(NewMessageDTO message)
+        public async Task<MessageDTO> AddAsync(NewMessageDTO message)
         {
-            try
-            {
-                var model = await airTableService.AddMessages(new NewDataSet(message));
-                return model.Records.Select(c => c.Fields.GetMessageDTO()).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var model = await airTableClient.AddMessages(new NewDataSet(message));
+            return model.Records.Select(c => c.GetMessageDTO()).FirstOrDefault();
         }
 
-        public async Task<List<MessageDTO>> GetAll()
+        public async Task<List<MessageDTO>> GetAllAsync()
         {
-            var models = await airTableService.GetMessages();
-            return models.Records.Select(c => c.Fields.GetMessageDTO()).ToList();
+            var models = await airTableClient.GetMessages();
+            return models.Records.Select(c => c.GetMessageDTO()).ToList();
         }
     }
 }

@@ -42,6 +42,7 @@ namespace LogProxy.Tests
 
         private void setupDataResult()
         {
+            fetchDataSet.Records = new List<FetchRecord>();
             fetchDataSet.Records.Add(new FetchRecord()
             {
                 Id = Guid.NewGuid().ToString(),

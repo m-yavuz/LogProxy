@@ -1,4 +1,4 @@
-name: .NET
+name: Build&Test
 
 
 on:
@@ -23,4 +23,4 @@ jobs:
     - name: Build
       run: dotnet build src --no-restore
     - name: Test
-      run: dotnet test src\LogProxy.Tests\LogProxy.Tests.csproj --verbosity normal
+      run: dotnet test src/LogProxy.Tests/LogProxy.Tests.csproj
